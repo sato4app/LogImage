@@ -19,10 +19,10 @@ function logSensorData() {
     let data = '';
 
     if (accelerometerChecked) {
-        data += '加速度データ: ' + Math.random().toFixed(2) + '\n'; // ダミーデータ
+        data += '加速度: ' + Math.random().toFixed(2) + '\n'; // ダミーデータ
     }
     if (gyroscopeChecked) {
-        data += 'ジャイロデータ: ' + Math.random().toFixed(2) + '\n'; // ダミーデータ
+        data += 'ジャイロ: ' + Math.random().toFixed(2) + '\n'; // ダミーデータ
     }
 
     const newData = document.createElement('div');

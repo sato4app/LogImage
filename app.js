@@ -7,31 +7,38 @@ let loggingInterval;
 let accelerationData = { x: 0, y: 0, z: 0 };
 let orientationData = { alpha: 0, beta: 0, gamma: 0 };
 
+// センサーの許可を画面に出力するための要素を取得
+const permissionOutput = document.getElementById('permissionOutput');
+
 // センサーの許可を求める関数
 async function requestSensorPermission() {
     if (typeof DeviceMotionEvent.requestPermission === 'function') {
         try {
             const response = await DeviceMotionEvent.requestPermission();
+            permissionOutput.textContent += `DeviceMotionEvent permission: ${response}\n`;
             if (response === 'granted') {
                 window.addEventListener('devicemotion', handleMotionEvent);
             }
         } catch (error) {
-            console.error('DeviceMotionEvent permission request failed:', error);
+            permissionOutput.textContent += 'DeviceMotionEvent permission request failed.\n';
         }
     } else {
+        permissionOutput.textContent += 'DeviceMotionEvent permission: not required\n';
         window.addEventListener('devicemotion', handleMotionEvent);
     }
 
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
             const response = await DeviceOrientationEvent.requestPermission();
+            permissionOutput.textContent += `DeviceOrientationEvent permission: ${response}\n`;
             if (response === 'granted') {
                 window.addEventListener('deviceorientation', handleOrientationEvent);
             }
         } catch (error) {
-            console.error('DeviceOrientationEvent permission request failed:', error);
+            permissionOutput.textContent += 'DeviceOrientationEvent permission request failed.\n';
         }
     } else {
+        permissionOutput.textContent += 'DeviceOrientationEvent permission: not required\n';
         window.addEventListener('deviceorientation', handleOrientationEvent);
     }
 }

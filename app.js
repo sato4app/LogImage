@@ -25,10 +25,12 @@ function logSensorData() {
         data += 'ジャイロ: ' + Math.random().toFixed(2); // + '\n'; // ダミーデータ
     }
 
-    const newData = document.createElement('div');
-    newData.textContent = data;
-    output.appendChild(newData);
-    output.scrollTop = output.scrollHeight;
+    if (data !== '') {
+        const newData = document.createElement('div');
+        newData.textContent = data;
+        output.appendChild(newData);
+        output.scrollTop = output.scrollHeight;
+    }
 }
 
 function clearOutput() {

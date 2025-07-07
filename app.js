@@ -7,20 +7,54 @@ let loggingInterval;
 let accelerationData = { x: 0, y: 0, z: 0 };
 let orientationData = { alpha: 0, beta: 0, gamma: 0 };
 
-window.addEventListener('devicemotion', function(event) {
+// センサーの許可を求める関数
+async function requestSensorPermission() {
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        try {
+            const response = await DeviceMotionEvent.requestPermission();
+            if (response === 'granted') {
+                window.addEventListener('devicemotion', handleMotionEvent);
+            }
+        } catch (error) {
+            console.error('DeviceMotionEvent permission request failed:', error);
+        }
+    } else {
+        window.addEventListener('devicemotion', handleMotionEvent);
+    }
+
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        try {
+            const response = await DeviceOrientationEvent.requestPermission();
+            if (response === 'granted') {
+                window.addEventListener('deviceorientation', handleOrientationEvent);
+            }
+        } catch (error) {
+            console.error('DeviceOrientationEvent permission request failed:', error);
+        }
+    } else {
+        window.addEventListener('deviceorientation', handleOrientationEvent);
+    }
+}
+
+// モーションイベントのハンドラ
+function handleMotionEvent(event) {
     const acceleration = event.acceleration;
     if (acceleration) {
         accelerationData.x = acceleration.x ? acceleration.x.toFixed(2) : 0;
         accelerationData.y = acceleration.y ? acceleration.y.toFixed(2) : 0;
         accelerationData.z = acceleration.z ? acceleration.z.toFixed(2) : 0;
     }
-});
+}
 
-window.addEventListener('deviceorientation', function(event) {
+// オリエンテーションイベントのハンドラ
+function handleOrientationEvent(event) {
     orientationData.alpha = event.alpha ? event.alpha.toFixed(2) : 0;
     orientationData.beta = event.beta ? event.beta.toFixed(2) : 0;
     orientationData.gamma = event.gamma ? event.gamma.toFixed(2) : 0;
-});
+}
+
+// ページ読み込み時にセンサーの許可を求める
+window.addEventListener('load', requestSensorPermission);
 
 function startLogging() {
     clearOutput();
@@ -38,10 +72,10 @@ function logSensorData() {
     let data = '';
 
     if (accelerometerChecked) {
-        data += `加速度: X=${accelerationData.x}, Y=${accelerationData.y}, Z=${accelerationData.z}  `;
+        data += `加速度: X=${accelerationData.x}, Y=${accelerationData.y}, Z=${accelerationData.z}\n`;
     }
     if (gyroscopeChecked) {
-        data += `ジャイロ: α=${orientationData.alpha}, β=${orientationData.beta}, γ=${orientationData.gamma}`;
+        data += `ジャイロ: α=${orientationData.alpha}, β=${orientationData.beta}, γ=${orientationData.gamma}\n`;
     }
 
     if (data !== '') {

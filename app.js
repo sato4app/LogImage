@@ -38,7 +38,7 @@ function logSensorData() {
     let data = '';
 
     if (accelerometerChecked) {
-        data += `加速度: X=${accelerationData.x}, Y=${accelerationData.y}, Z=${accelerationData.z}`;
+        data += `加速度: X=${accelerationData.x}, Y=${accelerationData.y}, Z=${accelerationData.z}  `;
     }
     if (gyroscopeChecked) {
         data += `ジャイロ: α=${orientationData.alpha}, β=${orientationData.beta}, γ=${orientationData.gamma}`;
